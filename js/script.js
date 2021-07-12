@@ -30,6 +30,37 @@ class Bullet {
 	}
 }
 
+class Enemy {
+	constructor(ctx, canvas, game, x, y) {
+		this.ctx = ctx
+		this.canvas = canvas
+		this.game = game
+		this.height = 30
+		this.width = 90
+		this.y = y - (this.height / 2)
+		this.x = x - (this.width / 2)
+		this.direction = DIRECTION.NONE
+	}
+	update() {
+		this.game.bullets.forEach(bullet => {
+			if (
+				this.x < bullet.x + bullet.width &&
+				this.x + this.width > bullet.x &&
+				this.y < bullet.y + bullet.height &&
+				this.y + this.height > bullet.y
+			) {
+				const bulletIndex = this.game.bullets.indexOf(bullet)
+				const enemyIndex = this.game.enemies.indexOf(this)
+				delete this.game.bullets[bulletIndex]
+				delete this.game.enemies[enemyIndex]
+			}
+		})
+	}
+	draw() {
+		this.ctx.fillRect(this.x, this.y, this.width, this.height)
+	}
+}
+
 class Player {
 	constructor(ctx, canvas, game) {
 		this.ctx = ctx
@@ -71,7 +102,13 @@ class Game {
 		this.canvas.height = document.documentElement.clientHeight
 
 		this.bullets = []
+		this.enemies = []
 		this.player = new Player(this.ctx, this.canvas, this)
+
+		for (let i = 0; i <= Math.floor(this.canvas.width / 110); i++) this.enemies.push(new Enemy(this.ctx, this.canvas, this, i == 0 ? 100 : (90 + Math.floor(this.canvas.width / 110)) * i, 20))
+		for (let i = 0; i <= Math.floor(this.canvas.width / 110); i++) this.enemies.push(new Enemy(this.ctx, this.canvas, this, i == 0 ? 100 : (90 + Math.floor(this.canvas.width / 110)) * i, 60))
+		for (let i = 0; i <= Math.floor(this.canvas.width / 110); i++) this.enemies.push(new Enemy(this.ctx, this.canvas, this, i == 0 ? 100 : (90 + Math.floor(this.canvas.width / 110)) * i, 100))
+
 
 		this.started = true
 
@@ -87,9 +124,10 @@ class Game {
 		this.player.update()
 		this.bullets.forEach(bullet => {
 			const bulletIndex = this.bullets.indexOf(bullet)
-			if (bullet.y <= 0) this.bullets.splice(bulletIndex, bulletIndex + 1)
+			if (bullet.y <= 0) delete this.bullets[bulletIndex]
 			bullet.update()
 		})
+		this.enemies.forEach(enemy => enemy.update())
 	}
 	draw() {
 		this.clear()
@@ -98,6 +136,7 @@ class Game {
 		this.ctx.fillStyle = '#FFFFFF'
 		this.player.draw()
 		this.bullets.forEach(bullet => bullet.draw())
+		this.enemies.forEach(enemy => enemy.draw())
 	}
 }
 
