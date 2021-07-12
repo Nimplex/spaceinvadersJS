@@ -105,10 +105,10 @@ class Game {
 		this.enemies = []
 		this.player = new Player(this.ctx, this.canvas, this)
 
-		for (let i = 0; i <= Math.floor(this.canvas.width / 110); i++) this.enemies.push(new Enemy(this.ctx, this.canvas, this, i == 0 ? 100 : (90 + Math.floor(this.canvas.width / 110)) * i, 20))
-		for (let i = 0; i <= Math.floor(this.canvas.width / 110); i++) this.enemies.push(new Enemy(this.ctx, this.canvas, this, i == 0 ? 100 : (90 + Math.floor(this.canvas.width / 110)) * i, 60))
-		for (let i = 0; i <= Math.floor(this.canvas.width / 110); i++) this.enemies.push(new Enemy(this.ctx, this.canvas, this, i == 0 ? 100 : (90 + Math.floor(this.canvas.width / 110)) * i, 100))
-
+		for (let y = 1; y <= 3; y++) {
+			for (let i = 1; i <= Math.floor(this.canvas.width / 110); i++) 
+				this.enemies.push(new Enemy(this.ctx, this.canvas, this, (90 + Math.floor(this.canvas.width / 110)) * i, 40 * y))
+		} 
 
 		this.started = true
 
