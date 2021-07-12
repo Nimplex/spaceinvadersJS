@@ -1,7 +1,7 @@
 const KEYS = {
 	A: 'KeyA',
 	D: 'KeyD',
-	SPACE: 'KeySpace'
+	SPACE: 'Space'
 }
 
 const DIRECTION = {
