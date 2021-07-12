@@ -160,11 +160,34 @@ class Game {
 		this.ctx.fillStyle = '#0f0f0f'
 		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
 
+		this.over = false
+
 		this.bullets = []
 		this.enemies = []
 		this.player = new Player(this.ctx, this.canvas, this)
 
-		window.addEventListener('keydown', (event) => event.code == KEYS.E ? this.startGame() : null)
+		let time;
+		let timeout = false;
+		let delta = 200;
+
+		window.addEventListener('resize', () => {
+			time = new Date()
+			if (timeout === false) {
+				timeout = true
+				setTimeout(resizeend, delta)
+			}
+		})
+		
+		const resizeend = () => {
+			if (new Date() - time < delta) {
+				setTimeout(resizeend, delta)
+			} else {
+				timeout = false
+				location.reload()
+			}
+		}
+
+		window.addEventListener('keydown', (event) => !this.over ? event.code == KEYS.E ? this.startGame() : null : null)
 
 		for (let y = 1; y <= 3; y++) {
 			for (let i = 1; i <= Math.floor(this.canvas.width / 110); i++) 
@@ -201,6 +224,7 @@ class Game {
 		this.clear()
 		if (this.started) gameOver.style.display = 'flex'
 		this.started = false
+		this.over = true
 	}
 	draw() {
 		this.clear()

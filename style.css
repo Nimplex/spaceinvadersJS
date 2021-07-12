@@ -11,6 +11,13 @@
 	user-select: none;
 }
 
+#author {
+	position: absolute;
+	color: rgba(255, 255, 255, 0.385);
+	top: 10px;
+	left: 10px;
+}
+
 #game_start,
 #game_over {
 	position: absolute;
