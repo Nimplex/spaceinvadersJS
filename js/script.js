@@ -19,6 +19,7 @@ const TYPES = {
 }
 
 const gameStart = document.getElementById('game_start')
+const gameOver = document.getElementById('game_over')
 
 class Bullet {
 	constructor(ctx, canvas, game, obj, direction = DIRECTION.UP) {
@@ -50,14 +51,19 @@ class Enemy {
 		this.canvas = canvas
 		this.game = game
 		this.height = 30
-		this.width = 90
+		this.width = 70
 		this.y = y - (this.height / 2)
 		this.x = x - (this.width / 2)
 		this.direction = DIRECTION.NONE
 		this.timeout = ''
+		
+		const images = ['./assets/spaceship_r.png', './assets/spaceship_y.png', './assets/spaceship_b.png', './assets/spaceship_g.png']
+		this.image = new Image(304, 132)
+		this.image.src = images[Math.floor(Math.random() * images.length)]
+
 		this.timeout = setInterval(() => {
 			if (this.game.started) this.y += 20
-		}, 8000)
+		}, 7300)
 	}
 	update() {
 		if (this.y >= this.canvas.height - (this.height * 3)) {
@@ -81,7 +87,8 @@ class Enemy {
 		if (Math.floor(Math.random() * 4000) == 2837) this.game.bullets.push(new Bullet(this.ctx, this.canvas, this.game, this, DIRECTION.DOWN))
 	}
 	draw() {
-		this.ctx.fillRect(this.x, this.y, this.width, this.height)
+		this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height)
+		// this.ctx.fillRect(this.x, this.y, this.width, this.height)
 	}
 }
 
@@ -91,16 +98,27 @@ class Player {
 		this.ctx = ctx
 		this.canvas = canvas
 		this.game = game
-		this.height = 20
-		this.width = 20
+		this.height = 40
+		this.width = 50
 		this.y = this.canvas.height - (this.height + 20)
 		this.x = (this.canvas.width / 2) - (this.width / 2)
 		this.direction = DIRECTION.NONE
 
+		this.image = new Image(304, 132)
+		this.image.src = './assets/player.png'
+
+		this.shootTimeout = false
+
 		window.addEventListener('keydown', (e) => {
 			if (e.code == KEYS.A) this.direction = DIRECTION.LEFT
 			if (e.code == KEYS.D) this.direction = DIRECTION.RIGHT
-			if (e.code == KEYS.SPACE) this.game.bullets.push(new Bullet(this.ctx, this.canvas, this.game, this))
+			if (e.code == KEYS.SPACE) {
+				if (!this.shootTimeout) {
+					setTimeout(() => this.shootTimeout = false, 1000)
+					this.game.bullets.push(new Bullet(this.ctx, this.canvas, this.game, this))
+				}
+				if (!this.shootTimeout) this.shootTimeout = true
+			}
 		})
 		window.addEventListener('keyup', (e) => {
 			if (e.code == KEYS.A && this.direction == DIRECTION.LEFT) this.direction = DIRECTION.NONE
@@ -127,7 +145,7 @@ class Player {
 		if (this.direction == DIRECTION.RIGHT) this.x += 2
 	}
 	draw() {
-		this.ctx.fillRect(this.x, this.y, this.width, this.height)
+		this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height)
 	}
 }
 
@@ -175,10 +193,12 @@ class Game {
 		this.enemies.forEach(enemy => enemy.update())
 	}
 	startGame() {
+		this.clear()
 		this.started = true
 		gameStart.style.display = 'none'
 	}
 	gameOver() {
+		this.clear()
 		if (this.started) gameOver.style.display = 'flex'
 		this.started = false
 	}
