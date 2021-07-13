@@ -56,15 +56,15 @@ class Enemy {
 		this.ctx = ctx
 		this.canvas = canvas
 		this.game = game
-		this.height = 30
-		this.width = 70
+		this.height = 50
+		this.width = 100
 		this.y = y - (this.height / 2)
 		this.x = x - (this.width / 2)
 		this.direction = DIRECTION.NONE
 		this.timeout = ''
 		
-		const images = ['./assets/spaceship_r.png', './assets/spaceship_y.png', './assets/spaceship_b.png', './assets/spaceship_g.png']
-		this.image = new Image(304, 132)
+		const images = ['./assets/spaceship_r.png']
+		this.image = new Image(512, 277)
 		this.image.src = images[Math.floor(Math.random() * images.length)]
 
 		this.timeout = setInterval(() => {
@@ -91,7 +91,7 @@ class Enemy {
 				explosion.play()
 			}
 		})
-		if (Math.floor(Math.random() * 3500) == 2837) this.game.bullets.push(new Bullet(this.ctx, this.canvas, this.game, this, DIRECTION.DOWN))
+		if (Math.floor(Math.random() * 1000) == 532) this.game.bullets.push(new Bullet(this.ctx, this.canvas, this.game, this, DIRECTION.DOWN))
 	}
 	draw() {
 		this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height)
@@ -121,7 +121,7 @@ class Player {
 			if (e.code == KEYS.D) this.direction = DIRECTION.RIGHT
 			if (e.code == KEYS.SPACE && this.game.over) {
 				if (!this.shootTimeout) {
-					setTimeout(() => this.shootTimeout = false, 200)
+					setTimeout(() => this.shootTimeout = false, 391)
 					this.game.bullets.push(new Bullet(this.ctx, this.canvas, this.game, this))
 					shoot.play()
 				}
