@@ -254,6 +254,7 @@ class Game {
 		if (this.started) gameWon.style.display = 'flex'
 		this.started = false
 		this.over = true
+		setTimeout(() => location.reload(), 3000)
 	}
 	gameOver() {
 		this.clear()
@@ -261,6 +262,7 @@ class Game {
 		this.started = false
 		this.over = true
 		explosion.play()
+		setTimeout(() => location.reload(), 3000)
 	}
 	draw() {
 		this.clear()
