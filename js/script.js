@@ -42,8 +42,8 @@ class Bullet {
 		this.y = obj.y - this.height
 		this.x = obj.x + (obj.width - this.width) / 2
 		this.direction = direction
-		this.speed = 2
-		const random = Math.floor(Math.random() * 4)
+		this.speed = 1.5
+		const random = Math.floor(Math.random() * 3)
 		if (Math.floor(Math.random() * 10) == random) this.speed = random == 0 ? 1 : random
 	}
 	update() {
@@ -156,8 +156,8 @@ class Player {
 		})
 		if (this.x < 0) this.x = 0
 		if (this.x > this.canvas.width - this.width) this.x = this.canvas.width - this.width
-		if (this.direction == DIRECTION.LEFT) this.x -= 3.5
-		if (this.direction == DIRECTION.RIGHT) this.x += 3.5
+		if (this.direction == DIRECTION.LEFT) this.x -= 2
+		if (this.direction == DIRECTION.RIGHT) this.x += 2
 	}
 	draw() {
 		this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height)
@@ -198,14 +198,6 @@ class Game {
 			}
 		}
 
-		const gameLoop = (ts) => {
-			if (this.started) {
-				this.update()
-				this.draw()
-			}
-			window.requestAnimationFrame(gameLoop)
-		}
-
 		window.addEventListener('keydown', (event) => !this.over ? event.code == KEYS.E ? this.startGame() : null : null)
 
 		for (let y = 1; y <= 3; y++) {
@@ -215,7 +207,12 @@ class Game {
 
 		this.started = false
 
-		window.requestAnimationFrame(gameLoop);
+		setInterval(() => {
+			if (this.started) {
+				this.update()
+				this.draw()
+			}
+		}, 0)
 	}
 	clear() {
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
@@ -264,7 +261,6 @@ class Game {
 		this.started = false
 		this.over = true
 		explosion.play()
-		this.setTimeout(() => location.reload(), 3000)
 	}
 	draw() {
 		this.clear()
