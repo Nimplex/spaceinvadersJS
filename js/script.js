@@ -20,6 +20,7 @@ const TYPES = {
 
 const gameStart = document.getElementById('game_start')
 const gameOver = document.getElementById('game_over')
+const gameWon = document.getElementById('game_won')
 
 class Bullet {
 	constructor(ctx, canvas, game, obj, direction = DIRECTION.UP) {
@@ -63,7 +64,7 @@ class Enemy {
 
 		this.timeout = setInterval(() => {
 			if (this.game.started) this.y += 20
-		}, 7300)
+		}, 6500)
 	}
 	update() {
 		if (this.y >= this.canvas.height - (this.height * 3)) {
@@ -114,7 +115,7 @@ class Player {
 			if (e.code == KEYS.D) this.direction = DIRECTION.RIGHT
 			if (e.code == KEYS.SPACE) {
 				if (!this.shootTimeout) {
-					setTimeout(() => this.shootTimeout = false, 1000)
+					setTimeout(() => this.shootTimeout = false, 10)
 					this.game.bullets.push(new Bullet(this.ctx, this.canvas, this.game, this))
 				}
 				if (!this.shootTimeout) this.shootTimeout = true
@@ -213,12 +214,35 @@ class Game {
 			if (bullet.y <= 0) delete this.bullets[bulletIndex]
 			bullet.update()
 		})
-		this.enemies.forEach(enemy => enemy.update())
+		// const random = Math.floor(Math.random() * 4000)
+		// if ([2173, 2381, 21, 283, 1928].includes(random)) {
+		// 	console.log('123')
+		// 	if ([true, false][Math.floor(Math.random() * 1)])
+		// 		this.enemies.forEach(enemy => {
+		// 			enemy.x == 0 ? x += 6 : null
+		// 			enemy.x -= 3
+		// 		})
+		// 	else
+		// 		this.enemies.forEach(enemy => {
+		// 			enemy.x == this.canvas.width ? x -= 6 : null
+		// 			enemy.x += 3
+		// 		})
+		// }
+		this.enemies.forEach(enemy => {
+			enemy.update()
+		})
+		if (this.enemies.filter((el) => el.x ? true : false).length == 0) this.gameWon()
 	}
 	startGame() {
 		this.clear()
 		this.started = true
 		gameStart.style.display = 'none'
+	}
+	gameWon() {
+		this.clear()
+		if (this.started) gameWon.style.display = 'flex'
+		this.started = false
+		this.over = true
 	}
 	gameOver() {
 		this.clear()

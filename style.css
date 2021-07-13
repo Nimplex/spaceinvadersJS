@@ -19,6 +19,7 @@
 }
 
 #game_start,
+#game_won,
 #game_over {
 	position: absolute;
 	text-align: center;
