@@ -21,6 +21,8 @@ const TYPES = {
 const gameStart = document.getElementById('game_start')
 const gameOver = document.getElementById('game_over')
 const gameWon = document.getElementById('game_won')
+const shoot = new Audio('/assets/shoot.wav')
+const explosion = new Audio('/assets/explosion.wav')
 
 class Bullet {
 	constructor(ctx, canvas, game, obj, direction = DIRECTION.UP) {
@@ -33,10 +35,13 @@ class Bullet {
 		this.y = obj.y - this.height
 		this.x = obj.x + (obj.width - this.width) / 2
 		this.direction = direction
+		this.speed = 1.5
+		const random = Math.floor(Math.random() * 3)
+		if (Math.floor(Math.random() * 10) == random) this.speed = random == 0 ? 1 : random
 	}
 	update() {
-		if (this.direction == DIRECTION.UP) this.y -= 1
-		if (this.direction == DIRECTION.DOWN) this.y += 1
+		if (this.direction == DIRECTION.UP) this.y -= this.speed
+		if (this.direction == DIRECTION.DOWN) this.y += this.speed
 	}
 	draw() {
 		this.direction == DIRECTION.DOWN ? this.ctx.fillStyle = '#FF0000' : null
@@ -64,7 +69,7 @@ class Enemy {
 
 		this.timeout = setInterval(() => {
 			if (this.game.started) this.y += 20
-		}, 6500)
+		}, 1400)
 	}
 	update() {
 		if (this.y >= this.canvas.height - (this.height * 3)) {
@@ -83,9 +88,10 @@ class Enemy {
 				const enemyIndex = this.game.enemies.indexOf(this)
 				delete this.game.bullets[bulletIndex]
 				delete this.game.enemies[enemyIndex]
+				explosion.play()
 			}
 		})
-		if (Math.floor(Math.random() * 4000) == 2837) this.game.bullets.push(new Bullet(this.ctx, this.canvas, this.game, this, DIRECTION.DOWN))
+		if (Math.floor(Math.random() * 3500) == 2837) this.game.bullets.push(new Bullet(this.ctx, this.canvas, this.game, this, DIRECTION.DOWN))
 	}
 	draw() {
 		this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height)
@@ -113,10 +119,11 @@ class Player {
 		window.addEventListener('keydown', (e) => {
 			if (e.code == KEYS.A) this.direction = DIRECTION.LEFT
 			if (e.code == KEYS.D) this.direction = DIRECTION.RIGHT
-			if (e.code == KEYS.SPACE) {
+			if (e.code == KEYS.SPACE && this.game.over) {
 				if (!this.shootTimeout) {
-					setTimeout(() => this.shootTimeout = false, 10)
+					setTimeout(() => this.shootTimeout = false, 200)
 					this.game.bullets.push(new Bullet(this.ctx, this.canvas, this.game, this))
+					shoot.play()
 				}
 				if (!this.shootTimeout) this.shootTimeout = true
 			}
@@ -235,6 +242,7 @@ class Game {
 	}
 	startGame() {
 		this.clear()
+		this.over = true
 		this.started = true
 		gameStart.style.display = 'none'
 	}
@@ -249,6 +257,7 @@ class Game {
 		if (this.started) gameOver.style.display = 'flex'
 		this.started = false
 		this.over = true
+		explosion.play()
 	}
 	draw() {
 		this.clear()
