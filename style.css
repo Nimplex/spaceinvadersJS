@@ -11,6 +11,10 @@
 	user-select: none;
 }
 
+body {
+	background: url('/assets/space.png');
+}
+
 #author {
 	position: absolute;
 	color: rgba(255, 255, 255, 0.385);

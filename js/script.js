@@ -24,6 +24,13 @@ const gameWon = document.getElementById('game_won')
 const shoot = new Audio('/assets/shoot.wav')
 const explosion = new Audio('/assets/explosion.wav')
 
+let time;
+let timeout = false;
+let delta = 200;
+
+const background = new Image(1920, 1080)
+background.src = '/assets/space.png'
+
 class Bullet {
 	constructor(ctx, canvas, game, obj, direction = DIRECTION.UP) {
 		this.obj = obj
@@ -174,10 +181,6 @@ class Game {
 		this.enemies = []
 		this.player = new Player(this.ctx, this.canvas, this)
 
-		let time;
-		let timeout = false;
-		let delta = 200;
-
 		window.addEventListener('resize', () => {
 			time = new Date()
 			if (timeout === false) {
@@ -261,8 +264,6 @@ class Game {
 	}
 	draw() {
 		this.clear()
-		this.ctx.fillStyle = '#0f0f0f'
-		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
 		this.ctx.fillStyle = '#FFFFFF'
 		this.player.draw()
 		this.bullets.forEach(bullet => bullet.draw())
