@@ -29,9 +29,6 @@ let timeout = false
 let delta = 200
 let moveToLeft = false
 
-const background = new Image(1920, 1080)
-background.src = '/assets/space.png'
-
 class Bullet {
 	constructor(ctx, canvas, game, obj, direction = DIRECTION.UP) {
 		this.obj = obj
@@ -72,7 +69,7 @@ class Enemy {
 		this.timeout = ''
 		
 		const images = ['./assets/spaceship_r.png']
-		this.image = new Image(512, 277)
+		this.image = new Image()
 		this.image.src = images[Math.floor(Math.random() * images.length)]
 
 		this.timeout = setInterval(() => {
@@ -113,13 +110,13 @@ class Player {
 		this.ctx = ctx
 		this.canvas = canvas
 		this.game = game
-		this.height = 40
-		this.width = 50
+		this.height = 80
+		this.width = 100
 		this.y = this.canvas.height - (this.height + 20)
 		this.x = (this.canvas.width / 2) - (this.width / 2)
 		this.direction = DIRECTION.NONE
 
-		this.image = new Image(304, 132)
+		this.image = new Image()
 		this.image.src = './assets/player.png'
 
 		this.shootTimeout = false
@@ -169,6 +166,8 @@ class Game {
 	constructor() {
 		this.canvas = document.getElementById('canvas')
 		this.ctx = this.canvas.getContext('2d')
+		this.ctx.imageSmoothingEnabled = false
+		this.ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1)
 
 		this.canvas.width = document.documentElement.clientWidth
 		this.canvas.height = document.documentElement.clientHeight
