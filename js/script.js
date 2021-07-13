@@ -217,8 +217,9 @@ class Game {
 		const enemy = new Enemy(this.ctx, this.canvas, this, -900, -900)
 
 		setInterval(() => {
-			if (this.enemies[0].x <= 0) moveToLeft = false
-			if (this.enemies[this.enemies.length - 1].x >= this.canvas.width - (enemy.width + 20) || moveToLeft) {
+			const enemies = this.enemies.filter((el) => el.x ? true : false)
+			if (enemies[0].x <= 0) moveToLeft = false
+			if (enemies[enemies.length - 1].x >= this.canvas.width - (enemy.width + 20) || moveToLeft) {
 				moveToLeft = true
 				this.enemies.forEach(enemy => {
 					for (let i = 0; i <= 5; i++) {
