@@ -24,9 +24,10 @@ const gameWon = document.getElementById('game_won')
 const shoot = new Audio('/assets/shoot.wav')
 const explosion = new Audio('/assets/explosion.wav')
 
-let time;
-let timeout = false;
-let delta = 200;
+let time
+let timeout = false
+let delta = 200
+let moveToLeft = false
 
 const background = new Image(1920, 1080)
 background.src = '/assets/space.png'
@@ -76,7 +77,7 @@ class Enemy {
 
 		this.timeout = setInterval(() => {
 			if (this.game.started) this.y += 20
-		}, 1400)
+		}, 2000)
 	}
 	update() {
 		if (this.y >= this.canvas.height - (this.height * 3)) {
@@ -176,6 +177,7 @@ class Game {
 		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
 
 		this.over = false
+		this.started = false
 
 		this.bullets = []
 		this.enemies = []
@@ -205,14 +207,36 @@ class Game {
 				this.enemies.push(new Enemy(this.ctx, this.canvas, this, (90 + Math.floor(this.canvas.width / 110)) * i, 40 * y))
 		} 
 
-		this.started = false
-
 		setInterval(() => {
 			if (this.started) {
 				this.update()
 				this.draw()
 			}
 		}, 0)
+
+		const enemy = new Enemy(this.ctx, this.canvas, this, -900, -900)
+
+		setInterval(() => {
+			if (this.enemies[0].x <= 0) moveToLeft = false
+			if (this.enemies[this.enemies.length - 1].x >= this.canvas.width - (enemy.width + 20) || moveToLeft) {
+				moveToLeft = true
+				this.enemies.forEach(enemy => {
+					for (let i = 0; i <= 5; i++) {
+						((t) => {
+							setTimeout(() => { enemy.x -= 5 }, 200 * t)
+						})(i)
+					}
+				})
+			} else if (!moveToLeft) {
+				this.enemies.forEach(enemy => {
+					for (let i = 0; i <= 5; i++) {
+						((t) => {
+							setTimeout(() => { enemy.x += 5 }, 200 * t)
+						})(i)
+					}
+				})
+			}
+		}, 1000)
 	}
 	clear() {
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
@@ -224,20 +248,6 @@ class Game {
 			if (bullet.y <= 0) delete this.bullets[bulletIndex]
 			bullet.update()
 		})
-		// const random = Math.floor(Math.random() * 4000)
-		// if ([2173, 2381, 21, 283, 1928].includes(random)) {
-		// 	console.log('123')
-		// 	if ([true, false][Math.floor(Math.random() * 1)])
-		// 		this.enemies.forEach(enemy => {
-		// 			enemy.x == 0 ? x += 6 : null
-		// 			enemy.x -= 3
-		// 		})
-		// 	else
-		// 		this.enemies.forEach(enemy => {
-		// 			enemy.x == this.canvas.width ? x -= 6 : null
-		// 			enemy.x += 3
-		// 		})
-		// }
 		this.enemies.forEach(enemy => {
 			enemy.update()
 		})
