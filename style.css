@@ -14,14 +14,23 @@
 body {
 	background: url('/assets/space.png');
 }
-
+/* 
 #author {
 	position: absolute;
 	color: rgba(255, 255, 255, 0.385);
 	top: 10px;
 	left: 10px;
+} */
+
+#menu {
+	width: 100vw;
+	height: 100vh;
+	position: absolute;
+	z-index: 999;
+	
 }
 
+/* 
 #game_start,
 #game_won,
 #game_over {
@@ -31,4 +40,4 @@ body {
 	justify-content: center;
 	width: 100vw;
 	height: 100vh;
-}
+} */
