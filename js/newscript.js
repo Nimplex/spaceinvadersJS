@@ -24,6 +24,7 @@ const { keys, directions, types } = {
 const menu = document.getElementById('menu')
 const menuOver = document.getElementById('menu_over')
 const menuStart = document.getElementById('menu_start')
+const menuShop = document.getElementById('menu_shop')
 
 // --------------------------------------------------- //
 
@@ -34,7 +35,7 @@ const shopButton = document.getElementById('shopButton')
 // Retry game
 const retryButton = document.getElementById('retryButton')
 // Back to main menu
-const backButton = document.getElementById('backButton')
+const backButton = document.getElementsByClassName('backButton')
 
 // --------------------------------------------------- //
 
@@ -46,6 +47,7 @@ class Game {
 	constructor() {
 		this.started = false
 		this.over = false
+		this.shop = false
 
 		menuStart.style.display = 'none'
 		menuOver.style.display = 'none'
@@ -53,32 +55,52 @@ class Game {
 
 		playButton.onclick = () => {
 			this.started = true
+			this.shop = false
+			this.over = false
+		}
+		shopButton.onclick = () => {
+			this.started = false
+			this.shop = true
+			this.over = false
 		}
 		retryButton.onclick = () => {
 			this.reset()
 			this.started = true
-		}
-		backButton.onclick = () => {
-			this.started = false
+			this.shop = false
 			this.over = false
+		}
+		for (const button of backButton) {
+			button.onclick = () => {
+				this.started = false
+				this.over = false
+				this.shop = false
+			}
 		}
 
 		setInterval(() => {
 			if (this.started) {
 				menuStart.style.display = 'none'
+				menuShop.style.display = 'none'
 				menuOver.style.display = 'none'
 				menu.style.display = 'none'
 				this.update()
 			}
 			if (this.over) {
-				menu.style.display = 'flex'
-				menuOver.style.display = 'block'
 				menuStart.style.display = 'none'
-			}
-			if (!this.started && !this.over) {
+				menuShop.style.display = 'none'
+				menuOver.style.display = 'block'
 				menu.style.display = 'flex'
+			}
+			if (!this.started && !this.over && !this.shop) {
 				menuStart.style.display = 'block'
+				menuShop.style.display = 'none'
 				menuOver.style.display = 'none'
+				menu.style.display = 'flex'
+			}
+			if (this.shop) {
+				menuStart.style.display = 'none'
+				menuShop.style.display = 'block'
+				menu.style.display = 'flex'
 			}
 		}, 1)
 	}
