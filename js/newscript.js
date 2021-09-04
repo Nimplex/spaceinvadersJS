@@ -2,7 +2,7 @@ const { keys, directions, types } = {
 	keys: {
 		left: 'KeyA',
 		rigth: 'KeyD',
-		space: 'Space'
+		space: 'Space',
 	},
 	directions: {
 		left: 1,
@@ -14,20 +14,16 @@ const { keys, directions, types } = {
 	types: {
 		enemy: 0,
 		player: 1,
-	}
+	},
 }
 
 const menu = document.getElementById('menu')
 const gameOver = document.getElementById('menu_over')
+const playButton = document.getElementById('playButton')
+const shopButton = document.getElementById('shopButton')
 
-class Bullet {
+class Bullet {} // TODO:...
 
-} // TODO:...
+class Character {} // TODO:...
 
-class Character {
-
-} // TODO:...
-
-class Game {
-
-} // TODO:...
+class Game {} // TODO:...

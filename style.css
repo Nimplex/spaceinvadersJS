@@ -14,30 +14,31 @@
 body {
 	background: url('/assets/space.png');
 }
-/* 
-#author {
-	position: absolute;
-	color: rgba(255, 255, 255, 0.385);
-	top: 10px;
-	left: 10px;
-} */
 
 #menu {
 	width: 100vw;
 	height: 100vh;
 	position: absolute;
+	display: flex;
 	z-index: 999;
-	
-}
-
-/* 
-#game_start,
-#game_won,
-#game_over {
-	position: absolute;
-	text-align: center;
+	background: rgba(15, 15, 15, 50%);
+	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	width: 100vw;
-	height: 100vh;
-} */
+}
+
+#menu #container #title {
+	font-weight: 800;
+}
+
+#menu #container button {
+	background: #f9fafb;
+	width: 100%;
+	height: 40px;
+	border: none;
+	border-radius: 0.25rem;
+	color: #1f2937;
+	margin: 5px 0;
+	font-weight: 500;
+	font-size: 15px;
+}
